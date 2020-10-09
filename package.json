@@ -1,0 +1,48 @@
+{
+  "name": "@coderbyheart/nordicwebinar2020",
+  "version": "0.0.0-development",
+  "description": "Nordic Webinar: Cloud connectivity and protocols for IoT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coderbyheart/nordicwebinar2020.git"
+  },
+  "keywords": [
+    "Cellular IoT",
+    "LTE-M",
+    "NB-IoT",
+    "MQTT",
+    "LWM2M",
+    "CoAP",
+    "Cloud",
+    "Application Development",
+    "Power Consumption",
+    "ultra-low-power"
+  ],
+  "author": "Markus Tacker <Markus.Tacker@NordicSemi.no>",
+  "license": "CC-BY-NC-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/coderbyheart/nordicwebinar2020/issues"
+  },
+  "homepage": "https://github.com/coderbyheart/nordicwebinar2020#readme",
+  "devDependencies": {
+    "@bifravst/code-style": "^8.0.134",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{yml,md,js,json}": [
+      "prettier --write --config .prettierrc.js"
+    ]
+  }
+}
