@@ -4,4 +4,4 @@ public/slides.pptx: slides.md
 
 public/index.html: slides.md
 	mkdir -p public/
-	pandoc --standalone -t revealjs -V revealjs-url=https://unpkg.com/reveal.js@\^4 -o $@ --slide-level 3 $<
+	pandoc --standalone -t revealjs -o $@ --slide-level 3 $<
