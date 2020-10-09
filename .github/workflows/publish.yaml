@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci --no-audit
-      - run: make public/index.html
+      - run: make build
       - name: Publish export to gh-pages
         run: |
           echo "machine github.com login authtoken password ${GITHUB_TOKEN}" > ~/.netrc
