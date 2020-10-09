@@ -1,5 +1,7 @@
-slides.pptx: slides.md
-	pandoc slides.md -o slides.pptx
+public/slides.pptx: slides.md
+	mkdir -p public/
+	pandoc $< -o $@
 
-slides.html: slides.md
-	pandoc --standalone -t revealjs -o slides.html --slide-level 3 slides.md
+public/slides.html: slides.md
+	mkdir -p public/
+	pandoc --standalone -t revealjs -o $@ --slide-level 3 $<
