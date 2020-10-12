@@ -11,6 +11,8 @@ Slides for the webinar, in Markdown format: [slides.md](./slides.md).
 An up-to-date version is published to
 [GitHub pages](https://coderbyheart.github.io/nordicwebinar2020/index.html).
 
+Press `s` to show the speaker notes.
+
 ## Building
 
 Render to reveal.js:
