@@ -36,6 +36,9 @@ header-includes: |
       background-size: cover;
       filter: blur(10px) opacity(0.1);
    }
+   #speakers img {
+      border-radius: 100%;
+    }
   </style>
 ---
 
