@@ -560,6 +560,13 @@ CBOR
 
 ::::::::::::::
 
+:::notes
+
+This shows the possible savings when encoding the GPS location message using
+CBOR.
+
+:::
+
 ## Application level protocols: Summary
 
 Look into denser data protocols!  
@@ -575,10 +582,82 @@ Look into denser data protocols!
 ## Transport protocols
 
 - MQTT+TLS
+- MQTT-SN+DTLS
 - CoAP/LWM2M+DTLS
-- Comparison
+
+## MQTT+TLS
+
+common protocol for "ecommerce" cloud vendors  
+([AWS](https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html),
+[Azure](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-protocols),
+[Google Cloud](https://cloud.google.com/iot/docs/concepts/protocols))
+
+- great fit for aynchronous, event oriented communication: MQTT is bidirectional
+  pub/sub model
+- overhead:
+  - topic name in every MQTT package  
+    № of topics per device: ~3
+  - TLS handshake with AWS IoT broker: ~10 KB
+- Supported out of the box in nRF Connect SDK
 
 :::notes
+
+MQTT with TLS is the default protocol when using IoT offerings from "ecommerce"
+cloud vendors like Amazon, Microsoft or Google. It's a great fit for the
+event-driven communication in IoT and allows both sides to initiate
+communication.
+
+However the protocol overhead for both MQTT and TLS are substantial: the initial
+handshake is large, and then every MQTT package contains repeated information.
+The MQTT topic name is quite long (typical size is around 60 Byte), which could
+actually be omitted.
+
+:::
+
+## MQTT-SN
+
+[MQTT-SN 1.2 Specification](https://www.oasis-open.org/committees/document.php?document_id=66091)
+
+- optimized version designed specifically IoT
+- supports UDP
+- use numeric IDs instead of strings for topic names
+- better offline support
+- **not supported** out of the box in nRF Connect SDK
+- **not supported** by cloud vendors: needs a (stateful) Gateway
+
+:::notes
+
+MQTT-SN was specifically designed for IoT devices and tries to address the
+issues mentioned earlier.
+
+The main differences involve:
+
+- Reducing the size of the message payload
+- Removing the need for a permanent connection by using UDP as the transport
+  protocol.
+
+:::
+
+## CoAP/LWM2M
+
+- common protocol in Telco clouds (Verizon’s Thingspace, AT&T’s IoT Platform)
+- typically used for device management (carrier library)
+- support in nRF Connect SDK
+  ([CoAP client sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/coap_client/README.html),
+  [LwM2M client sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/lwm2m_client/README.html))
+- **not supported** by cloud vendors: needs a (stateful) Gateway.  
+  Proof-of-concept AWS IoT-LwM2M Gateway:
+  [github.com/coderbyheart/leshan-aws](https://github.com/coderbyheart/leshan-aws)
+
+:::notes
+
+This protocol is mostly used for device management. Especially LwM2M comes with
+a large set of predefined operations (e.g. firmware update) and uses very
+lightweight messaging. It also supports UDP out of the box which makes it an
+ideal protoco for resource constraint devices.
+
+However there is no out-of-the box support by ecommerce cloud vendors, so here
+again one needs to operate a Gateway.
 
 :::
 
