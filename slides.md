@@ -5,9 +5,9 @@ header-includes: |
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;400;500&display=swap" rel="stylesheet">
   <style>
    .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
-    font-weight: 200;
-    text-transform: none;
-    font-family: var(--heading-font);
+      font-weight: 200;
+      text-transform: none;
+      font-family: var(--heading-font);
    } 
    .reveal {
         font-size: var(--main-font-size);
@@ -20,7 +20,20 @@ header-includes: |
    :root {
         --main-font: 'Work Sans', sans-serif;
        --heading-font: 'Work Sans', sans-serif;
-       --main-font-size: 30px;
+   }
+   .reveal-viewport {
+     background-color: #fff;
+   }
+   .reveal-viewport::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: url(graphic-to-be-filtered.jpg);
+      background: url('./bg.png') no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      filter: blur(10px) opacity(0.1);
    }
   </style>
 ---
@@ -36,8 +49,8 @@ header-includes: |
 **Senior R&D Engineer**  
 Nordic Semiconductor
 
-[Markus.Tacker@NordicSemi.no](mailto:Markus.Tacker@NordicSemi.no)  
-Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)
+<small>[Markus.Tacker@NordicSemi.no](mailto:Markus.Tacker@NordicSemi.no)  
+Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)</small>
 
 :::
 
@@ -48,11 +61,13 @@ Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)
 **Application Engineer**  
 Nordic Semiconductor
 
-[Carl.Fosse@NordicSemi.no](mailto:Carl.Fosse@NordicSemi.no)
+<small>[Carl.Fosse@NordicSemi.no](mailto:Carl.Fosse@NordicSemi.no)</small>
 
 :::
 
 ::::::::::::::
+
+[#NordicTechWebinars](https://twitter.com/hashtag/NordicTechWebinars)
 
 ## Agenda
 
@@ -89,8 +104,8 @@ What you see here is a typical configuration for cellular IoT devices.
 - **sensor readings** (like position, temperature)
 - information about it's **health** (like battery level)
 
-Because the latest state should be immediately visible:  
-buffer data in a _Digital Twin_.
+Because the latest state should be immediately visible: buffer data in a
+_Digital&nbsp;Twin_.
 
 :::notes
 
@@ -359,11 +374,24 @@ Get prototyping:
 
 Please let us know your feedback!
 
-[Markus.Tacker@NordicSemi.no](mailto:Markus.Tacker@NordicSemi.no) &middot;
-[\@coderbyheart](https://twitter.com/coderbyheart)
+:::::::::::::: {.columns}
 
-[Carl.Fosse@NordicSemi.no](mailto:Carl.Fosse@NordicSemi.no)
+::: {.column width="50%"}
 
+<small>[Markus.Tacker@NordicSemi.no](mailto:Markus.Tacker@NordicSemi.no)  
+Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)</small>
+
+:::
+
+::: {.column width="50%"}
+
+<small>[Carl.Fosse@NordicSemi.no](mailto:Carl.Fosse@NordicSemi.no)</small>
+
+:::
+
+::::::::::::::
+
+[#NordicTechWebinars](https://twitter.com/hashtag/NordicTechWebinars)  
 [\{DevZone](https://devzone.nordicsemi.com/)
 
 :::notes

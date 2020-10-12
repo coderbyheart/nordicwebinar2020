@@ -9,5 +9,6 @@ public/index.html: slides.md
 	pandoc --standalone -t revealjs -o $@ --slide-level 3 $<
 
 build: public/index.html
+	cp -v ./bg.png public/
 	cp -v ./dekningskart.png public/
 	cp -v ./common-iot-data-protocols.jpg public/
