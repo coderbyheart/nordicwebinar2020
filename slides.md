@@ -281,37 +281,280 @@ amount of data becomes, the longer your battery will last.
 
 - JSON
 - Alternatives to JSON
+  - Flatbuffers
+  - CBOR
 
 :::notes
+
+Let's look at the "default" protocol for encoding application level data and
+what alternatives exist to reduce the amount of data needed to transmit a
+typical device message: a GPS location.
 
 :::
 
 ## JSON
 
-:::notes
+```json
+{
+  "v": {
+    "lng": 10.414394,
+    "lat": 63.430588,
+    "acc": 17.127758,
+    "alt": 221.639832,
+    "spd": 0.320966,
+    "hdg": 0
+  },
+  "ts": 1566042672382
+}
+```
+
+"default" data protocol for IoT
+([AWS](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html),
+[Azure](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-device-twins),
+[Google Cloud](https://cloud.google.com/iot/docs/how-tos/config/getting-state#api))
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+👍 human readable  
+👍 schema-less (self-describing)
 
 :::
 
-## Alternatives to JSON
+::: {.column width="50%"}
 
-- [CBOR](https://cbor.io/)
-- [Flatbuffers](https://google.github.io/flatbuffers/)
-
-:::notes
+👎 overhead
 
 :::
 
-## CBOR
+::::::::::::::
 
 :::notes
+
+JSON offers very good support in tooling and is human readable. Especially
+during development its verbosity is valuable.
+
+:::
+
+## Possible Optimizations
+
+GPS location message
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+```json
+{
+  "v": {
+    "lng": 10.414394,
+    "lat": 63.430588,
+    "acc": 17.127758,
+    "alt": 221.639832,
+    "spd": 0.320966,
+    "hdg": 0
+  },
+  "ts": 1566042672382
+}
+```
+
+:::
+
+::: {.column width="50%"}
+
+<br/>
+
+```
+02 36 01 37 51 4b 73 2b
+d4 24 40 09 68 06 f1 81
+1d b7 4f 40 11 68 cd 8f
+bf b4 20 31 40 19 e6 5d
+f5 80 79 b4 6b 40 21 1a
+30 48 fa b4 8a d4 3f 29
+00 00 00 00 00 00 00 00
+09 00 e0 cf ac f6 c9 76
+42
+```
+
+:::
+
+::::::::::::::
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+JSON  
+114 bytes  
+<small>without newlines</small>
+
+:::
+
+::: {.column width="50%"}
+
+Protocol Buffers  
+65 bytes (-42%)  
+<small>[source](https://gist.github.com/coderbyheart/34a8e71ffe30af882407544567971efb)</small>
+
+:::
+
+::::::::::::::
+
+:::notes
+
+Consider this GPS message. It contains a lot of data which is intended for
+humans, but not needed for machines sending or receiving the data.
+
+The pure binary message would be transmitting only the 6 floats and 1 integer of
+the message. However a strucured message format is always preferred because we
+also want to ensure it's integrity.
+
+In JSON notation this document (without newlines) has 114 bytes. If the message
+were to be transferred using for example Protocol Buffers the data can be
+encoded with only 65 bytes (a 42% improvement).
+
+See also:
+[RION Performance Benchmarks](http://tutorials.jenkov.com/rion/rion-performance-benchmarks.html)
 
 :::
 
 ## Flatbuffers
 
+[google.github.io/flatbuffers](https://google.github.io/flatbuffers/)
+
+- evolution of
+  [Protocol Buffers](https://developers.google.com/protocol-buffers)
+- **access a buffer without parsing**
+- smaller library,
+  [C implementation exists](https://github.com/dvidelabs/flatcc)
+- wire format size
+  [a little bigger](http://google.github.io/flatbuffers/flatbuffers_benchmarks.html)
+  compared to Protocol Buffers
+- schema-less (self-describing) messages are supported
+- **NOT** supported in Zephyr/NCS
+
 :::notes
 
+In the comparison on the previous slide we showed how using Protocol Buffers can
+dramatically reduce the transferred data size, while keeping a typed message.
+
+The implementation of Protocol Buffers is however quite big (for a resource
+constrained device like the nRF 9160), and no official encoder/decoder
+implementation exists for C,
+[inofficial does](https://github.com/protobuf-c/protobuf-c).
+
+Flatbuffers is the best candidate with similar data savings.
+
+Especially the ability to access members of a message directly in place makes it
+ideal for memory-constrained devices: no need to create a second copy of the
+received values.
+
+It also offers flexibility during development is also supported because
+FlatBuffers offers a schema-less (self-describing) version.
+
+Unfortunately there is no official support in the nRF Connect SDK or Zephyr as
+of now.
+
 :::
+
+## CBOR
+
+[cbor.io](https://cbor.io/)
+
+- maps JSON to binary structures
+- zero configuration needed between exchanging parties
+- support in Zephyr ([tinycbor](https://github.com/zephyrproject-rtos/tinycbor))
+
+:::notes
+
+Therefore the best alternative to JSON right now is CBOR.
+
+CBOR is standard for encoding JSON data in a set of binary structures. It
+reduces volume by using more compact one byte values to replace two or more
+punctuation marks.
+
+Official support is available in Zephyr.
+
+:::
+
+## CBOR: example
+
+GPS location message
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+```json
+{
+  "v": {
+    "lng": 10.414394,
+    "lat": 63.430588,
+    "acc": 17.127758,
+    "alt": 221.639832,
+    "spd": 0.320966,
+    "hdg": 0
+  },
+  "ts": 1566042672382
+}
+```
+
+:::
+
+::: {.column width="50%"}
+
+<br/>
+
+```
+A2 61 76 A6 63 6C 6E 67
+FB 40 24 D4 2B 73 4B 51
+37 63 6C 61 74 FB 40 4F
+B7 1D 81 F1 06 68 63 61
+63 63 FB 40 31 20 B4 BF
+8F CD 68 63 61 6C 74 FB
+40 6B B4 79 80 F5 5D E6
+63 73 70 64 FB 3F D4 8A
+B4 FA 48 30 1A 63 68 64
+67 00 62 74 73 1B 00 00
+01 6C 9F 6A CC FE
+```
+
+:::
+
+::::::::::::::
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+JSON  
+114 bytes  
+<small>without newlines</small>
+
+:::
+
+::: {.column width="50%"}
+
+CBOR  
+86 bytes (-24%)  
+<small>[source](http://cbor.me/)</small>
+
+:::
+
+::::::::::::::
+
+## Application level protocols: Summary
+
+Look into denser data protocols!  
+**JSON is for Humans.**
+
+- devices always™ send the same structure:  
+  no need to transmit it
+- less data to send
+  - less money spent on data (grows linear with № of devices)
+  - less energy consumed = longer device lifetime
+  - lower chance of failed transmit
 
 ## Transport protocols
 
