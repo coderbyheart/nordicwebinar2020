@@ -13,6 +13,7 @@ header-includes: |
         font-size: var(--main-font-size);
         font-family: var(--main-font); 
         font-weight: 400;
+        font-size: 32px;
    }
    .reveal strong {
         font-weight: 500;
