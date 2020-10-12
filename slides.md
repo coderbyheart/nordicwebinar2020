@@ -3,21 +3,34 @@ title: Cloud connectivity and protocols for the Internet of Things
 theme: white
 slideNumber: true
 header-includes: |
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
    .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
-      font-weight: 200;
+      font-weight: 300;
       text-transform: none;
       font-family: var(--heading-font);
+      color: #00a9ce;
    } 
    .reveal {
         font-size: var(--main-font-size);
         font-family: var(--main-font); 
         font-weight: 400;
         font-size: 32px;
+        margin-top: 42px;
+        height: calc(100% - 42px);
    }
    .reveal strong {
         font-weight: 500;
+   }
+   .reveal a {
+      color: #00a9ce;
+   }
+   .reveal ul {
+     list-style-type: square;
+     list-style-color: #00a9ce;
+   }
+   .reveal li::marker {
+     color: #00a9ce;
    }
    :root {
         --main-font: 'Work Sans', sans-serif;
@@ -27,15 +40,18 @@ header-includes: |
      background-color: #fff;
    }
    .reveal-viewport::before {
-      content: "";
+      content: "© Nordic Semiconductor";
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: url(graphic-to-be-filtered.jpg);
-      background: url('./bg.png') no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-      filter: blur(10px) opacity(0.1);
+      width: 100%; 
+      height: 42px;
+      background-color: #00a9ce;
+      color: white;
+      font-family: var(--main-font);
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 42px;
+      padding-left: 10vw;
    }
    #speakers img {
       border-radius: 100%;
