@@ -1,6 +1,7 @@
 ---
 title: Cloud connectivity and protocols for the Internet of Things
 theme: white
+slideNumber: true
 header-includes: |
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;400;500&display=swap" rel="stylesheet">
   <style>
