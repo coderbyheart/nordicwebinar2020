@@ -10,4 +10,5 @@ public/index.html: slides.md
 
 build: public/index.html
 	cp -v ./dekningskart.png public/
+	cp -v ./titlebg.png public/
 	cp -v ./common-iot-data-protocols.jpg public/

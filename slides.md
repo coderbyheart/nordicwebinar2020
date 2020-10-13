@@ -42,7 +42,8 @@ header-includes: |
    .reveal-viewport::before {
       content: "© Nordic Semiconductor";
       position: absolute;
-      top: 0; left: 0;
+      top: 0; 
+      left: 0;
       width: 100%; 
       height: 42px;
       background-color: #00a9ce;
@@ -55,6 +56,31 @@ header-includes: |
    }
    #speakers img {
       border-radius: 100%;
+    }
+    .slide-background:first-child .slide-background-content {
+      background-image: url('./titlebg.png');
+      
+    }
+    #title-slide h1 {
+      color: white;
+      font-weight: 500;
+      font-size: 60px;
+    }
+    #title-slide h1:after {
+      content: "Nordic Tech Webinar";
+      display: block;
+      color: #222;
+      background-color: white;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-weight: 300;
+      font-size: 32px;
+    }
+    #title-slide:after {
+      content: "October 2020";
+      font-size: 22px;
+      color: white;
+      font-style: italic;
     }
   </style>
 ---
