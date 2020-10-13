@@ -118,8 +118,8 @@ Nordic Semiconductor
 
 ## Agenda
 
-- Application level data
-- Application level protocols
+- Application data
+- Data protocols
 - Transport protocols
 - How to measure data usage
 - Wireless radio protocols
@@ -127,7 +127,7 @@ Nordic Semiconductor
 - Summary
 - Ways to your first proof-of-concept
 
-## Application level data
+## Application data
 
 ![Typical IoT Data Protocol Configuration](./common-iot-data-protocols.jpg){width=50%}
 
@@ -139,14 +139,14 @@ What you see here is a typical configuration for cellular IoT devices.
 
 :::
 
-## The four kinds of data
+### The four kinds of data
 
 1. Device State
 1. Device Configuration
 1. Past Data
 1. Firmware Updates
 
-## 1. Device State
+### 1. Device State
 
 - **sensor readings** (like position, temperature)
 - information about it's **health** (like battery level)
@@ -168,7 +168,7 @@ the device to connect and publish its state.
 
 :::
 
-## Update Device State only if needed
+### Update Device State only if needed
 
 - implement situational awareness on the device
 - only send **relevant** data
@@ -199,7 +199,7 @@ is not in motion.
 
 :::
 
-## 2. Device Configuration
+### 2. Device Configuration
 
 - change behaviour of device in real time (e.g. sensor sensititiy, timeouts)
 - configure physical state (e.g. _locked_ state of a door lock)
@@ -240,7 +240,7 @@ amount of data which needs to be transferred to the device.
 
 :::
 
-## 3. Past Data
+### 3. Past Data
 
 Cellular IoT devices need to send **data about past events**: they will be
 offline most of the time.
@@ -276,7 +276,7 @@ backend to provide the action to execute based on the current condition.
 
 :::
 
-## 4. Firmware Updates
+### 4. Firmware Updates
 
 - 2-3 magnitudes larger than a control message (~250 KB)
 - notification via control channel (MQTT)
@@ -297,8 +297,9 @@ applied to conserve resources.
 
 :::
 
-## Great potential for optimization
+### Summary: Application data
 
+- **great potential for optimization**
 - **initiating and maintaining network connection is magnitudes more expensive**
   compared to other device operations (for example reading a sensor value)
 - **invest a substantial amount** into optimizing these when developing an
@@ -319,7 +320,7 @@ amount of data becomes, the longer your battery will last.
 
 :::
 
-## Application level protocols
+## Data protocols
 
 - JSON
 - Alternatives to JSON
@@ -328,13 +329,13 @@ amount of data becomes, the longer your battery will last.
 
 :::notes
 
-Let's look at the "default" protocol for encoding application level data and
-what alternatives exist to reduce the amount of data needed to transmit a
-typical device message: a GPS location.
+Let's look at the "default" protocol for encoding Application data and what
+alternatives exist to reduce the amount of data needed to transmit a typical
+device message: a GPS location.
 
 :::
 
-## JSON
+### JSON
 
 ```json
 {
@@ -379,7 +380,7 @@ during development its verbosity is valuable.
 
 :::
 
-## Possible Optimizations
+### Possible Optimizations
 
 GPS location message
 
@@ -461,7 +462,7 @@ See also:
 
 :::
 
-## Flatbuffers
+### Flatbuffers
 
 [google.github.io/flatbuffers](https://google.github.io/flatbuffers/)
 
@@ -500,7 +501,7 @@ of now.
 
 :::
 
-## CBOR
+### CBOR
 
 [cbor.io](https://cbor.io/)
 
@@ -520,7 +521,7 @@ Official support is available in Zephyr.
 
 :::
 
-## CBOR: example
+### CBOR: example
 
 GPS location message
 
@@ -593,7 +594,7 @@ CBOR.
 
 :::
 
-## Application level protocols: Summary
+### Summary: Data protocols
 
 Look into denser data protocols!  
 **JSON is for Humans.**
@@ -608,10 +609,10 @@ Look into denser data protocols!
 ## Transport protocols
 
 - MQTT+TLS
-- MQTT-SN+DTLS
-- CoAP/LWM2M+DTLS
+- MQTT-SN+(D)TLS
+- CoAP/LWM2M+(D)TLS
 
-## MQTT+TLS
+### MQTT+TLS
 
 common protocol for "ecommerce" cloud vendors  
 ([AWS](https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html),
@@ -640,7 +641,7 @@ actually be omitted.
 
 :::
 
-## MQTT-SN
+### MQTT-SN+(D)TLS
 
 [MQTT-SN 1.2 Specification](https://www.oasis-open.org/committees/document.php?document_id=66091)
 
@@ -664,7 +665,7 @@ The main differences involve:
 
 :::
 
-## CoAP/LWM2M
+### CoAP/LWM2M+(D)TLS
 
 - common protocol in Telco clouds (Verizon’s Thingspace, AT&T’s IoT Platform)
 - typically used for device management (carrier library)
@@ -687,9 +688,98 @@ again one needs to operate a Gateway.
 
 :::
 
-## How to measure:
+## How to measure data usage
+
+- measure during development already: import input on picking the right
+  connectivity partner
+- measuring at multiple endpoints tricky, does not measure retransmits
+- nRF9160 modem provides
+  [connectivity statistics](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxconnstat.html)
 
 :::notes
+
+One of the biggest cost factors when operating a cellular IoT product are data
+transfers. Not only are prices for IoT connectivity multiple magnitudes more
+expensive to what we are used from smartphone contracts, but transmitting data
+also requires a lot of energy. The longer the devices needs to transmit a
+payload the more likely it is also that the connection deteriorates (especially
+when the device is moving) and re-transmits need to happen. Therefore it is
+important to pay close attention to the amount of data your product is sending
+from the beginning. Having knowledge about the data usage profile of your
+application at hand also becomes important when picking the right connectivity
+partner.
+
+While it is possible to infer a device's data consumption on the terminating
+endpoint, this information is not accurate, because it can observe successfully
+incoming messages. It can also become challenging to cover all endpoints, for
+example Firmware over the Air updates are typically downloaded via HTTPs from a
+web server and not through MQTT.
+
+:::
+
+### Enable connectivity statistics
+
+Use `AT%XCONNSTAT=1` to tell the modem to start collecting connectivity
+statistics
+
+```c
+#include <modem/at_cmd.h>
+
+int err = at_cmd_write("AT%XCONNSTAT=1", NULL, 0, NULL);
+if (err != 0) {
+	printk("Could not enable connection statistics, error: %d\n", err);
+}
+```
+
+### Read current connectivity statistics
+
+Use `AT%XCONNSTAT?` to read the current connectivity statistics
+
+```c
+static struct k_delayed_work connstat_work;
+
+static int query_modem(const char *cmd, char *buf, size_t buf_len) { ... }
+
+static void connstat_work_fn(struct k_work *work)
+{
+	query_modem("AT%XCONNSTAT?", connStatBuffer, sizeof(connStatBuffer));
+	// NOTE: k_uptime_get_32() cannot hold a system uptime time
+	// larger than approximately 50 days
+	printk("Connection stats: %s | Uptime: %d seconds\n",
+		connStatBuffer, k_uptime_get_32() / 1000);
+	// Schedule next run
+	k_delayed_work_submit(&connstat_work, K_SECONDS(60));
+}
+
+k_delayed_work_init(&connstat_work, connstat_work_fn);
+k_delayed_work_submit(&connstat_work, K_SECONDS(60));
+```
+
+<small>You can see a full diff of how I added this to one of my applications
+[here](https://github.com/coderbyheart/nRF9160-temperature-controlled-relay/commit/d0c43bb5c11347987ce61c84c695e17eb38f39cd).</small>
+
+### Connectivity statistics output
+
+    Connection stats: %XCONNSTAT: 0,0,14,16,748,134 | Uptime: 5041 seconds
+
+#### Syntax
+
+    %XCONNSTAT: <SMS Tx>,<SMS Rx>,<Data Tx>,<Data Rx>,<Packet max>,<Packet average>
+
+1. SMS Tx: total number of SMSs successfully transmitted
+1. SMS Rx: total number of SMSs successfully received
+1. **Data Tx: total amount of data (in kilobytes) transmitted**
+1. **Data Rx: total amount of data (in kilobytes) received**
+1. Packet max: maximum packet size (in bytes) used
+1. Packet average: average packet size (in bytes) used
+
+:::notes
+
+Now you have access to the connectivity statistics, and can for example publish
+this to the cloud every hour so you can collect precise data consumption usage
+from your devices. Together with the uptime information collected on the device
+you will be able to develop a very good understand of what the typical data
+usage per day, week and month will be for your devices.
 
 [See this blog post](https://devzone.nordicsemi.com/nordic/cellular-iot-guides/b/software-and-protocols/posts/monitoring-nrf9160-data-usage-with-connectivity-statistics)
 
