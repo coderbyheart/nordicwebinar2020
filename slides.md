@@ -914,7 +914,7 @@ Speaker: Carl Richard Fosse
 
 ## Summary
 
-- no silver bullet - multiple conflicting dimensions need to be considered
+- no silver bullet - multiple _conflicting_ dimensions need to be considered
 - highly depends on use case scenario
 - ultra-low power relevant in all scenarios
 
@@ -924,19 +924,81 @@ Speaker: Carl Richard Fosse
 
 ## Ways to your first proof-of-concept
 
-Get prototyping:
-
-- [nRF Connect for Cloud](https://www.nordicsemi.com/Software-and-tools/Development-Tools/nRF-Connect-for-Cloud)
-- [Docker + AWS Sample](https://github.com/coderbyheart/fw-nrfconnect-nrf-docker)
-- [Bifravst](https://bifravst.gitbook.io/bifravst/)
+- nRF Connect for Cloud
+- Bifravst
 
 :::notes
+
+Now, if you want to get started with developing your cellular IoT product here
+are some resources...
+
+:::
+
+### nRF Connect for Cloud
+
+- cloud resources (AWS) provided by us
+- our
+  [cellular IoT Development Kits](https://www.nordicsemi.com/Software-and-tools/Development-Kits)
+  are preconfigured to connect
+- you can focus on modifying the
+  [sample application](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.3.2/nrf/applications/asset_tracker/README.html)
+  - [Building NCS applications with Docker](https://github.com/coderbyheart/fw-nrfconnect-nrf-docker#using-pre-built-image-from-dockerhub)
+    in ~2 minutes
+
+![nRF Connect for Cloud](./nrfconnectforcloud.webp){width=10%}  
+<small>[nrfcloud.com](https://nrfcloud.com/)</small>
+
+:::notes
+
+nRF Connect for Cloud is an integral part of you cellular IoT development
+workflow. We have made nRF Connect for Cloud simple to use, yet powerful and
+efficient when getting your cellular designs and products connected.
+
+:::
+
+### Bifravst
+
+- concrete end-to-end example for a ultra-low power cellular IoT product in the
+  asset tracker space
+- end-to-end example: firmare 🡘 cloud 🡘 mobile web app
+- runs in your AWS account  
+  <small>Azure support
+  [in progress](https://github.com/bifravst/bifravst/issues/29)</small>
+- fully open-source  
+  <small>3-clause BSD license (software) and the Nordic 5-clause BSD license
+  (firmware)</small>
+- [firmware](https://github.com/bifravst/firmware) developed from ground up with
+  power consumption in mind
+
+![Bifravst](./cat-tracker.png){width=50%}  
+<small>[bifravst.github.io](https://bifravst.github.io/)</small>
+
+:::notes
+
+_Bifravst_ aims to provide a concrete end-to-end example for an ultra-low power
+IoT product in the asset tracker space, namely a _Cat Tracker_.
+
+**_Bifravst_ enables the developers to set up a real world IoT solution using
+the respective cloud provider and adapt the example firmware and software
+quickly for a specific use case.**
+
+_Bifravst_ aims to provide answers and recommend best practices to the following
+questions :
+
+- _How can you connect Nordic's cellular IoT chips to your cloud provider?_
+- _How do devices send data into the cloud?_
+- _How can the data be sent to the devices?_
+- _How can users and other services interact with the devices?_
+- _How can you update the application firmware of your devices while they are
+  deployed in the field?_
+- _How can you develop a cellular IoT product that maximizes battery life,
+  minimizes data usage, and handles unreliable connectivity gracefully?_
 
 :::
 
 ## Thank you!
 
-Please let us know your feedback!
+Please share your feedback!
 
 :::::::::::::: {.columns}
 
