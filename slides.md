@@ -483,7 +483,7 @@ In the comparison on the previous slide we showed how using Protocol Buffers can
 dramatically reduce the transferred data size, while keeping a typed message.
 
 The implementation of Protocol Buffers is however quite big (for a resource
-constrained device like the nRF 9160), and no official encoder/decoder
+constrained device like the nRF9160), and no official encoder/decoder
 implementation exists for C,
 [inofficial does](https://github.com/protobuf-c/protobuf-c).
 
@@ -690,9 +690,10 @@ again one needs to operate a Gateway.
 
 ## How to measure data usage
 
-- measure during development already: import input on picking the right
+- measure during development already: important input on picking the right
   connectivity partner
-- measuring at multiple endpoints tricky, does not measure retransmits
+- measuring at multiple endpoints tricky (MQTT + HTTP), does not measure failed
+  transmits
 - nRF9160 modem provides
   [connectivity statistics](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxconnstat.html)
 
