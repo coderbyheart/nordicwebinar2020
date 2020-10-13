@@ -82,6 +82,9 @@ header-includes: |
       color: white;
       font-style: italic;
     }
+    figcaption {
+      display: none;
+    }
   </style>
 ---
 
@@ -92,6 +95,8 @@ header-includes: |
 ::: {.column width="50%"}
 
 ![Markus Tacker](https://images.contentful.com/bncv3c2gt878/6CWMgqeZdCmkk6KkIUksgQ/50922090bc6566c6624c12b82a4bf78c/36671282034_427eace68d_o.jpg){width=35%}
+
+Markus Tacker
 
 **Senior R&D Engineer**  
 Nordic Semiconductor
@@ -104,6 +109,8 @@ Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)</small>
 ::: {.column width="50%"}
 
 ![Carl Richard Fosse](https://media-exp1.licdn.com/dms/image/C4E03AQEOzpPDY87zTg/profile-displayphoto-shrink_800_800/0?e=1607558400&v=beta&t=8fuZjNlQUZAJb4oLuunZ0NP5D01CL9_W4IMvifA6pjI){width=35%}
+
+Carl Richard Fosse
 
 **Application Engineer**  
 Nordic Semiconductor
@@ -130,6 +137,8 @@ Nordic Semiconductor
 ## Application data
 
 ![Typical IoT Data Protocol Configuration](./common-iot-data-protocols.jpg){width=50%}
+
+Typical IoT Data Protocol Configuration
 
 :::notes
 
@@ -245,7 +254,7 @@ amount of data which needs to be transferred to the device.
 Cellular IoT devices need to send **data about past events**: they will be
 offline most of the time.
 
-![](./dekningskart.png)
+![Coverage map](./dekningskart.png)
 
 :::notes
 
@@ -788,11 +797,106 @@ usage per day, week and month will be for your devices.
 
 ## Wireless radio protocols
 
-- LTE-m
-- NB-IoT
-- Comparison
+![Wireless radio protocols](./wireless-protocols.webp)
 
 :::notes
+
+The nRF9160 supports two cellular networking protocols: LTE-M and NB-IoT.
+Fundamentally they both provide IP connectivity to your device, however they are
+significant differences, which are important to consider when developing your
+IoT product.
+
+See
+[this comparison](https://www.nordicsemi.com/Products/Low-power-cellular-IoT)
+
+:::
+
+### ![LTE](./ltem.webp)
+
+- 375 kbps downlink, 300 kbps uplink
+- ~100 kbps application throughput running IP
+- supports roaming (same as LTE)
+- typically uses frequency bands above 2 Ghz
+- ms-latency
+
+:::notes
+
+LTE-M (also known as Cat-M1) is designed for low power applications requiring
+medium throughput. It has a narrower bandwidth of 1.4 MHz compared to 20 MHz for
+regular LTE, giving longer range, but less throughput. The throughput is 375
+kbps downlink and 300 kbps uplink, providing approximately 100 kbps application
+throughput running IP. It is suitable for TCP/TLS end-to-end secure connections.
+Mobility is fully supported, using the same cell handover features as in regular
+LTE. It is currently possible to roam with LTE-M, meaning it is suitable for
+applications that will operate across multiple regions. The latency is in the
+millisecond range offering real time communication for time-critical
+applications.
+
+:::
+
+### ![NB-IoT](./nbiot.webp)
+
+- 60 kbps downlink, 30 kbps uplink
+- typically uses frequency bands below 2 Ghz
+- no roaming support (some Telcos do offer custom solution)
+- good indoor/underground penetration characteristics
+- long range
+
+:::notes
+
+NB-IoT (also known as Cat-NB1) is a narrowband technology standard that does not
+use a traditional LTE physical layer, but is designed to operate in or around
+LTE bands and coexist with other LTE devices. It has a bandwidth of 200 kHz,
+giving it longer range and lower throughput compared to LTE-M and regular LTE.
+The throughput is 60 kbps downlink and 30 kbps uplink. It is suitable for
+static, low power applications requiring low throughput.
+
+:::
+
+### Comparison
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+#### LTE-m
+
+<small>for medium throughput applications requiring low power, low latency
+and/or mobility</small>
+
+- asset tracking
+- wearables
+- medical
+- POS
+- home security
+
+:::
+
+::: {.column width="50%"}
+
+#### NB-IoT
+
+<small>for static, low throughput applications requiring low power and long
+range</small>
+
+- smart metering
+- smart agriculture
+- smart city
+
+:::
+
+::::::::::::::
+
+:::notes
+
+LTE-M is perfect for medium throughput applications requiring low power, low
+latency and/or mobility, like asset tracking, wearables, medical, POS and home
+security applications.
+
+NB-IoT is perfect for static, low throughput applications requiring low power
+and long range, like smart metering, smart agriculture and smart city
+applications. It also provides better penetration in, for example, cellars and
+parking garages compared to LTE-M.
 
 :::
 
