@@ -902,13 +902,9 @@ parking garages compared to LTE-M.
 
 ## Power consumption
 
-- Summary of my approach
-- test setup and limitations
-- Results
+Carl Richard Fosse
 
 :::notes
-
-Speaker: Carl Richard Fosse
 
 :::
 
