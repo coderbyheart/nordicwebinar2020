@@ -1016,7 +1016,7 @@ Twitter: [\@coderbyheart](https://twitter.com/coderbyheart)</small>
 [#NordicTechWebinars](https://twitter.com/hashtag/NordicTechWebinars)  
 [\{DevZone](https://devzone.nordicsemi.com/)
 
-<small>Slides: [`bit.ly/nwiotp`](http://bit.ly/nwiotp)</small>
+<small>Latest version: [`bit.ly/nwiotp`](http://bit.ly/nwiotp)</small>
 
 :::notes
 
