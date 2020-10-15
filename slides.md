@@ -158,7 +158,7 @@ What you see here is a typical configuration for cellular IoT devices.
 ### 1. Device State
 
 - **sensor readings** (like position, temperature)
-- information about it's **health** (like battery level)
+- information about its **health** (like battery level)
 
 Because the latest state should be immediately visible: buffer data in a
 _Digital&nbsp;Twin_.
@@ -166,7 +166,7 @@ _Digital&nbsp;Twin_.
 :::notes
 
 A device needs to send its sensor readings (like position, temperature) and
-information about it's health to the backend, first an foremost is the battery
+information about its health to the backend, first an foremost is the battery
 level a critical health indicator. This data is considered the device state.
 
 Because we want to always be able to quickly see the latest state of the device,
@@ -460,7 +460,7 @@ humans, but not needed for machines sending or receiving the data.
 
 The pure binary message would be transmitting only the 6 floats and 1 integer of
 the message. However a strucured message format is always preferred because we
-also want to ensure it's integrity.
+also want to ensure its integrity.
 
 In JSON notation this document (without newlines) has 114 bytes. If the message
 were to be transferred using for example Protocol Buffers the data can be
