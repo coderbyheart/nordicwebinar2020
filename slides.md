@@ -628,8 +628,8 @@ common protocol for "ecommerce" cloud vendors
 [Azure](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-protocols),
 [Google Cloud](https://cloud.google.com/iot/docs/concepts/protocols))
 
-- great fit for aynchronous, event oriented communication: MQTT is bidirectional
-  pub/sub model
+- great fit for asynchronous, event oriented communication: MQTT is
+  bidirectional pub/sub model
 - overhead:
   - topic name in every MQTT package  
     № of topics per device: ~3
