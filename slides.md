@@ -992,7 +992,7 @@ questions :
 
 :::
 
-## Thank you!
+## Thank you & happy connecting!
 
 Please share your feedback!
 
