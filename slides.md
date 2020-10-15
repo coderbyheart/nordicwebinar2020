@@ -954,7 +954,7 @@ efficient when getting your cellular designs and products connected.
 
 ### Bifravst
 
-- concrete end-to-end example for a ultra-low power cellular IoT product in the
+- concrete end-to-end example for an ultra-low power cellular IoT product in the
   asset tracker space
 - end-to-end example: firmare 🡘 cloud 🡘 mobile web app
 - runs in your AWS account  
