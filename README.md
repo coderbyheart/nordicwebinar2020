@@ -4,7 +4,12 @@
 
 [![Nordic Semiconductor Webinar: Cloud connectivity and protocols for IoT](./announcement.jpg)](https://webinars.nordicsemi.com/cloud-connectivity-and-protocols/join)
 
-Slides for the webinar, in Markdown format: [slides.md](./slides.md).
+Slides for the webinar:
+
+- [Markdown](./slides.md)
+- [PDF](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.0.0/PowerPoint.Slides.with.Notes.pdf)
+  ([without notes](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.0.0/PowerPoint.Slides.pdf))
+- [Interactive](https://coderbyheart.github.io/nordicwebinar2020/index.html)
 
 ## Viewing
 
@@ -19,6 +24,6 @@ Render to reveal.js:
 
     make public/index.html
 
-Render to PowerPoint:
+Render to PowerPoint (useful for copying to a slides template):
 
     make public/slides.pptx
