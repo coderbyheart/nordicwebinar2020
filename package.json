@@ -32,7 +32,7 @@
   "devDependencies": {
     "@bifravst/code-style": "^8.0.134",
     "husky": "^4.3.0",
-    "lint-staged": "^10.4.0",
+    "lint-staged": "10.4.2",
     "live-server": "^1.2.1",
     "prettier": "^2.1.2"
   },
