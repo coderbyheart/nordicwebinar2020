@@ -130,7 +130,7 @@ Nordic Semiconductor
 - Transport protocols
 - How to measure data usage
 - Wireless radio protocols
-- Power consumption
+- Energy consumption considerations
 - Summary
 - Ways to your first proof-of-concept
 
@@ -811,7 +811,7 @@ See
 
 :::
 
-### ![LTE](./ltem.webp)
+### ![LTE-m](./ltem.webp)
 
 - 375 kbps downlink, 300 kbps uplink
 - ~100 kbps application throughput running IP
@@ -900,13 +900,278 @@ parking garages compared to LTE-M.
 
 :::
 
-## Power consumption
+## Energy consumption considerations
 
-Carl Richard Fosse
+<small>Carl Richard Fosse</small>
 
 :::notes
 
+Low power operation is key for many IoT devices Application protocols on
+cellular devices like the nRF9160
+
 :::
+
+### My master thesis research
+
+_“Power Consumption modeling of TCP and UDP over low power cellular networks for
+a constrained device”_
+
+- TCP represented by MQTT
+- UDP represented by CoAP
+- Tested both protocols over NB-IoT and LTE-M, using the nRF9160.
+- Used the data to empirically model the power consumption of the device.
+
+:::notes
+
+Last spring, before starting at Nordic Titled “Power Consumption modeling of TCP
+and UDP over low power cellular networks for a constrained device”, where I
+compared TCP and UDP over LTE-M and NB-IoT using the nRF9160.
+
+Used the data to model energy consumption given parameters like payload size and
+transmission interval.
+
+Will talk about findings and observations.
+
+:::
+
+### Experiment setup: Components
+
+- Hardware: nRF9160DK v0.8.5
+- SDK: v1.2.0
+- Measurement unit: Otii ARC
+- Network provider: Telenor LTE-M and NB-IoT
+
+- Power measurement setup will be more thoroughly covered in our webinar the 9th
+  of December.
+
+:::notes
+
+- Quick runthrough
+- nRF9160DK version 0.8.5
+- nRF Connect SDK version 1.2
+- Otii ARC for current measurement
+- The Norwegian network provider Telenor and their LTE-M and NB-IoT networks
+
+:::
+
+### Experiment setup: Firmware
+
+- One application for MQTT and one for CoAP  
+  <small>(available on [GitHub](https://github.com/crfosse/dt_app))</small>
+- Long PSM interval with regular transmissions and increasing payload
+- Average sleep current ~200µA
+
+:::notes
+
+- Two applications
+- Regular transmissions
+- Both using the Power Saving Mode feature defined for LTE-M and NB-IoT.
+- The PSM specification allows for a device to initiate transmissions during the
+  defined PSM interval.
+- A long PSM interval was used to avoid other wakeups than those initiated by
+  regular transmissions.
+- Did not focus on optimizing the power consumption performance of the
+  applications.
+- Rather wanted to focus on how the protocols performed with relation to
+  eachother.
+
+:::
+
+### Energy consumption factors: Application protocols
+
+- Establishment of connection
+  - Especially relevant for TCP
+- Acknowledgements
+- Payload size
+- Protocol defined limits
+  - Maximum transmission unit (MTU)
+  - Maximum segment size (MSS)
+
+### Energy consumption factors: Cellular network
+
+- Connection
+- RRC inactive timer
+- Reception quality
+
+- Additional parameters - see the Online Power Profiler
+
+:::notes
+
+- Short summary of important factors affecting the energy consumption of a
+  cellular device
+- Connection establishment is relevant on application protocol level and for
+  cellular networks
+- TCP has persistent connection, requiring more traffic
+- To enable reliable communication acknowledgements are important.
+- They lead to unpredictable behavior as well as more traffic
+- There are many limits imposed by different protocols
+- MTU from IP and Ethernet
+- MSS on TCP to avoid IP fragmentation
+
+- Connecting to the cellular network is costly. PSM lowers the cost.
+- With PSM the devices stays active during an RRC inactive countdown consuming
+  power. (network defined)
+
+- Test and read about additional parameters in our online power profiler
+
+:::
+
+### Time diagram
+
+![](./time-diagram.png)
+
+:::notes
+
+- Example diagram of a transmission.
+  - Exits PSM and reconnects
+- Transmits
+- Stays active.
+  - Last part is active timer. Only relevant if you expect data to be received.
+- Not used in my research.
+
+:::
+
+### In reality
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+
+![](./mqtt-over-nbiot.png)
+
+:::
+
+::: {.column width="50%"}
+
+![](./mqtt-over-ltem.png)
+
+:::
+
+::::::::::::::
+
+:::notes
+
+Example transmissions for MQTT over LTE-M and NB-IoT. Notice where the
+transmission is finished and inactive countdown starts. Very different on the
+LTE-M and NB-IoT LTE-M has higher peaks and more frequent activity, which in
+turn affects the power consumption.
+
+:::
+
+### Some results
+
+### Transmission energy
+
+![](./transmission-energy.png)
+
+:::notes
+
+- Averaged out plots for energy used on transmission
+- Dashed line – with RRC inactive
+- Solid line – without RRC inactive energy
+- The RRC inactive energy is dependent on network provider and was therefore not
+  considered
+- Notice how much it contributes to the total energy consumed
+
+- NB-IoT is linearly dependent on payload size.
+- LTE-M, with higher capacity, is not. Within the tested payload size range.
+- Some outliers for TCP over LTE-M resulting in energy consumption spikes.
+  Restarting of RRC inactive timer due to activity
+
+- CoAP in general use less energy than MQTT.
+- Mentioned MSS earlier. These results evidently shows how this affects energy
+  consumption
+- For MQTT on both LTE-M and NB-IoT there is an increase in consumed power after
+  payload exceeds ~500 bytes
+- The base MSS is 536 bytes.
+
+Note at last that there is a starting cost to every transmission.
+
+:::
+
+### Transmission energy
+
+![](./message-energy-variation.png){width=60%}
+
+:::notes
+
+- Violin plots showing variation and distribution of measurements, based on
+  residuals from regression analysis.
+- Small for NB-IoT
+- More spurious for LTE-M
+
+:::
+
+### Transmission time
+
+![](./transmission-time.png)
+
+:::notes
+
+Plot of transmission time. The dashed line shows how long the device stays
+active in total
+
+- LTE-M is as expected faster than NB-IoT.
+- Not a strong correlation for any of them with payload size
+- Notice that the MSS affects time used on transmission aswell
+
+:::
+
+### Transmission time variation
+
+![](./transmission-time-variation.png){width=60%}
+
+:::notes
+
+- Violin plots of variation and distribution of transmission time measurements
+- NB-IoT is wide and latent.
+- LTE-M especially for CoAP has a low variation.
+
+:::
+
+### Important observations: Application protocols
+
+- MQTT
+  - TCP is not ideal for low power applications
+  - MQTT is a popular and well supported protocol
+- CoAP
+  - Less overhead compared to MQTT
+  - Enables reliable UDP
+  - Not that popular
+
+:::notes
+
+- MQTT is well supported, but TCP is not ideal for low power use. We saw more
+  spurious timing and energy consumption
+- CoAP has less overhead, supports reliability, but is not very popular(yet?)
+
+:::
+
+### Important observations: Cellular standards
+
+- LTE-M
+  - High speed, high capacity
+  - Power consumption not correlated with payload size
+  - More “spurious” energy consumption
+- NB-IoT
+  - Slow, low capacity
+  - Energy consumption is linearly dependent with payload size
+
+:::notes
+
+- LTE-M and NB-IoT are as expected suited for different purposes.
+- LTE-M saw higher peak currents as well as some spurious behavior during the
+  inactive countdown.
+- When transmitting large amounts of data on a network that provides a short
+  inactive countdown LTE-M can actually outperform NB-IoT in terms of power
+  consumption.
+- Due to the linear dependency of NB-IoT with relation to payload size.
+
+:::
+
+### Transfer large amounts of data rarely
+
+rather than small amounts often.
 
 ## Summary
 
