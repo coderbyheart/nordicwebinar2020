@@ -7,8 +7,8 @@
 Slides for the webinar:
 
 - [Markdown](./slides.md)
-- [PDF](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.0.0/PowerPoint.Slides.with.Notes.pdf)
-  ([without notes](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.0.0/PowerPoint.Slides.pdf))
+- [PDF](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.1.1/Cloud.connectivity.and.protocols.for.the.Internet.of.Things.-.Notes.pdf)
+  ([without notes](https://github.com/coderbyheart/nordicwebinar2020/releases/download/1.1.1/Cloud.connectivity.and.protocols.for.the.Internet.of.Things.pdf))
 - [Interactive](https://coderbyheart.github.io/nordicwebinar2020/index.html)
 
 ## Viewing
