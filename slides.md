@@ -795,6 +795,16 @@ usage per day, week and month will be for your devices.
 
 :::
 
+### Caution
+
+Do not use the connectivity statistics in applications which use the
+[LwM2M carrier library](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/lib/bin/lwm2m_carrier/lwm2m_carrier.html#liblwm2m-carrier-readme).
+
+This library manages the collection of connectivity statistics and will turn
+them on and off on its behalf. If your application interferes with this
+statistics collection it will result in incorrect measurements in the carrier's
+device management solution.
+
 ## Wireless radio protocols
 
 ![Wireless radio protocols](./wireless-protocols.webp)
