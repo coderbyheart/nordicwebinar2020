@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Cloud connectivity and protocols for the Internet of Things</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/white.css" id="theme">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+   .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+      font-weight: 300;
+      text-transform: none;
+      font-family: var(--heading-font);
+      color: #00a9ce;
+   } 
+   .reveal {
+        font-size: var(--main-font-size);
+        font-family: var(--main-font); 
+        font-weight: 400;
+        font-size: 32px;
+        margin-top: 42px;
+        height: calc(100% - 42px);
+   }
+   .reveal strong {
+        font-weight: 500;
+   }
+   .reveal a {
+      color: #00a9ce;
+   }
+   .reveal ul {
+     list-style-type: square;
+     list-style-color: #00a9ce;
+   }
+   .reveal li::marker {
+     color: #00a9ce;
+   }
+   :root {
+        --main-font: 'Work Sans', sans-serif;
+       --heading-font: 'Work Sans', sans-serif;
+   }
+   .reveal-viewport {
+     background-color: #fff;
+   }
+   .reveal-viewport::before {
+      content: "© Nordic Semiconductor";
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 42px;
+      background-color: #00a9ce;
+      color: white;
+      font-family: var(--main-font);
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 42px;
+      padding-left: 10vw;
+   }
+   #speakers img {
+      border-radius: 100%;
+    }
+    .slide-background:first-child .slide-background-content {
+      background-image: url('./titlebg.png');
+      
+    }
+    #title-slide h1 {
+      color: white;
+      font-weight: 500;
+      font-size: 60px;
+    }
+    #title-slide h1:after {
+      content: "Nordic Tech Webinar";
+      display: block;
+      color: #222;
+      background-color: white;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-weight: 300;
+      font-size: 32px;
+    }
+    #title-slide:after {
+      content: "October 2020";
+      font-size: 22px;
+      color: white;
+      font-style: italic;
+    }
+    figcaption {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Cloud connectivity and protocols for the Internet of Things</h1>
+</section>
+
+<section id="speakers" class="title-slide slide level2">
+<h2>Speakers</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<figure>
+<img data-src="https://images.contentful.com/bncv3c2gt878/6CWMgqeZdCmkk6KkIUksgQ/50922090bc6566c6624c12b82a4bf78c/36671282034_427eace68d_o.jpg" style="width:35.0%" alt="Markus Tacker" /><figcaption aria-hidden="true">Markus Tacker</figcaption>
+</figure>
+<p>Markus Tacker</p>
+<p><strong>Senior R&amp;D Engineer</strong><br />
+Nordic Semiconductor</p>
+<p><small><a href="mailto:Markus.Tacker@NordicSemi.no">Markus.Tacker@NordicSemi.no</a><br />
+Twitter: <a href="https://twitter.com/coderbyheart">@coderbyheart</a></small></p>
+</div><div class="column" style="width:50%;">
+<figure>
+<img data-src="https://media-exp1.licdn.com/dms/image/C4E03AQEOzpPDY87zTg/profile-displayphoto-shrink_800_800/0?e=1607558400&amp;v=beta&amp;t=8fuZjNlQUZAJb4oLuunZ0NP5D01CL9_W4IMvifA6pjI" style="width:35.0%" alt="Carl Richard Fosse" /><figcaption aria-hidden="true">Carl Richard Fosse</figcaption>
+</figure>
+<p>Carl Richard Fosse</p>
+<p><strong>Application Engineer</strong><br />
+Nordic Semiconductor</p>
+<p><small><a href="mailto:Carl.Fosse@NordicSemi.no">Carl.Fosse@NordicSemi.no</a></small></p>
+</div>
+</div>
+<p><a href="https://twitter.com/hashtag/NordicTechWebinars">#NordicTechWebinars</a></p>
+</section>
+
+<section id="agenda" class="title-slide slide level2">
+<h2>Agenda</h2>
+<ul>
+<li>Application data</li>
+<li>Data protocols</li>
+<li>Transport protocols</li>
+<li>How to measure data usage</li>
+<li>Wireless radio protocols</li>
+<li>Energy consumption considerations</li>
+<li>Summary</li>
+<li>Ways to your first proof-of-concept</li>
+</ul>
+</section>
+
+<section>
+<section id="application-data" class="title-slide slide level2">
+<h2>Application data</h2>
+<figure>
+<img data-src="./common-iot-data-protocols.jpg" style="width:50.0%" alt="Typical IoT Data Protocol Configuration" /><figcaption aria-hidden="true">Typical IoT Data Protocol Configuration</figcaption>
+</figure>
+<p>Typical IoT Data Protocol Configuration</p>
+<aside class="notes">
+<p><a href="https://miro.com/app/board/o9J_kjPVxw8=/">Source</a></p>
+<p>What you see here is a typical configuration for cellular IoT devices.</p>
+</aside>
+</section>
+<section id="the-four-kinds-of-data" class="slide level3">
+<h3>The four kinds of data</h3>
+<ol type="1">
+<li>Device State</li>
+<li>Device Configuration</li>
+<li>Past Data</li>
+<li>Firmware Updates</li>
+</ol>
+</section>
+<section id="device-state" class="slide level3">
+<h3>1. Device State</h3>
+<ul>
+<li><strong>sensor readings</strong> (like position, temperature)</li>
+<li>information about its <strong>health</strong> (like battery level)</li>
+</ul>
+<p>Because the latest state should be immediately visible: buffer data in a <em>Digital Twin</em>.</p>
+<aside class="notes">
+<p>A device needs to send its sensor readings (like position, temperature) and information about its health to the backend, first an foremost is the battery level a critical health indicator. This data is considered the device state.</p>
+<p>Because we want to always be able to quickly see the latest state of the device, a digital twin can be used to store this state on the backend side: whenever the device sends an update, the digital twin is updated. This allows an application to access the most recent device state immediately without needing to wait for the device to connect and publish its state.</p>
+</aside>
+</section>
+<section id="update-device-state-only-if-needed" class="slide level3">
+<h3>Update Device State only if needed</h3>
+<ul>
+<li>implement situational awareness on the device</li>
+<li>only send <strong>relevant</strong> data
+<ul>
+<li>did a sensor reach a critical threshold?</li>
+<li>has enough time passed since last update?</li>
+<li>is the connection good enough?</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>It is an important criterion for the robustness of any IoT product to gracefully handle situations in which the device is not connected to the internet. It might even not be favorable to be connected all the time—wireless communication is relatively expensive consumes a lot of energy and therefore increases the power consumption.</p>
+<blockquote>
+<p>To optimize for ultra-low power consumption, we want to turn off the modem as quickly as possible and keep it off as long as possible.</p>
+</blockquote>
+<p>This can be achieved by making the device smart and allowing it to decide based on the situation whether it should try to send data.</p>
+<p>For example could an asset tracker use the motion sensor to decide whether to publish its state frequently or if it detects no movement for a while go into a passive mode, where it turns of the modem and waits until it detects movement again. It could also use the internal clock to wake up every hour to sent a heartbeat, after all we might want to know that the device is healthy, even it is not in motion.</p>
+</aside>
+</section>
+<section id="device-configuration" class="slide level3">
+<h3>2. Device Configuration</h3>
+<ul>
+<li>change behaviour of device in real time (e.g. sensor sensititiy, timeouts)</li>
+<li>configure physical state (e.g. <em>locked</em> state of a door lock)</li>
+</ul>
+<aside class="notes">
+<p>Depending on the product we might also want to change the device configuration. This could on the one hand be use during development to tweak the aforementioned behavior using variables instead of pushing a new firmware over the air to the device. We observe firmware sizes of around 250 KB which will, even when compressed, be expensive because it will take a device some time to download and apply the updated, not to mention the costs for transferring the firmware update over the cellular network. Especially in NB-IoT-only deployments is the data rate low. Updating a fleet of devices with a new firmware involves orchestrating the roll-out and observing for faults. All these challenges lead to the need to be able to <strong>configure the device</strong>, which allows to tweak the behavior of the device until the inflection point is reached: battery life vs. data granularity. Interesting configuration options are for example the sensitivity of the motion sensor: depending on the tracked subject what is considered “movement” can vary greatly. Various timeout settings have an important influence on power- and data-consumption: the time the device waits to acquire a GPS fix, or the time it waits between sending updates when in motion.</p>
+<p>On the other hand is device configuration needed if the device controls something: imaging a smart lock which needs to manipulate the state of a physical lock. The backend needs a way to tell the device which state that lock should be in, and this setting needs to be persisted on the backend, since the device could lose power, crash or otherwise lose the information if the lock should be open or closed.</p>
+<p>Here again is the digital twin used on the cloud side to store the latest desired configuration of the device immediately, so the application does not have to wait for the device to be connected to record the configuration change. The implementation of the digital twin then will take care of sending only the latest required changes to the device (all changes since the device did last request its configuration are combined into one change) thus also minimizing the amount of data which needs to be transferred to the device.</p>
+</aside>
+</section>
+<section id="past-data" class="slide level3">
+<h3>3. Past Data</h3>
+<p>Cellular IoT devices need to send <strong>data about past events</strong>: they will be offline most of the time.</p>
+<figure>
+<img data-src="./dekningskart.png" alt="Coverage map" /><figcaption aria-hidden="true">Coverage map</figcaption>
+</figure>
+<aside class="notes">
+<p><a href="https://www.telenor.no/privat/dekning/">Source</a></p>
+<p>Imagine a reindeer tracker which tracks the position of a herd. If position updates are only collected when a cellular connection can be established there will be an interesting observation: the reindeers are only walking along ridges, but never in valleys. The reason is not because they don’t like the valley, but because the cellular signal does not reach deep down into remote valleys. The GPS signal however will be received there from the tracker because satellites are high on the horizon and can send their signal down into the valley.</p>
+<p>There are many scenarios where cellular connection might not be available or unreliable but reading sensors work. Robust ultra-mobile IoT products therefore must make this a normal mode of operation: the absence of a cellular connection must be treated as a temporary condition which will eventually resolve and until then business as usual ensues. This means devices should keep measuring and storing these measures in a ring-buffer or employ other strategies to decide which data to discard once the memory limit is reached.</p>
+<p>Once the device is successfully able to establish a connection it will then (after publishing its most recent measurements) publish past data in batch.</p>
+<p>On a side note: the same is true for devices that control a system. They should have built-in decision rules and must not depend on an answer from a cloud backend to provide the action to execute based on the current condition.</p>
+</aside>
+</section>
+<section id="firmware-updates" class="slide level3">
+<h3>4. Firmware Updates</h3>
+<ul>
+<li>2-3 magnitudes larger than a control message (~250 KB)</li>
+<li>notification via control channel (MQTT)</li>
+<li>download via data channel (HTTP): less overhead, supports resume</li>
+</ul>
+<aside class="notes">
+<p>Arguably a firmware update over the air can be seen as configuration, however the size of a typical firmware image (250 KB) is 2-3 magnitudes larger than a control message. Therefore it can be beneficial to treat it differently. Typically an update is initiated by a configuration change, once acknowledged by the device will initiate the firmware download. The download itself is done out of band using not MQTT but HTTP(s) to reduce overhead.</p>
+<p>Additionally firmware updates are so large compared to other messages that the device may suspend all other operation until the firmware update has been applied to conserve resources.</p>
+</aside>
+</section>
+<section id="summary-application-data" class="slide level3">
+<h3>Summary: Application data</h3>
+<ul>
+<li><strong>great potential for optimization</strong></li>
+<li><strong>initiating and maintaining network connection is magnitudes more expensive</strong> compared to other device operations (for example reading a sensor value)</li>
+<li><strong>invest a substantial amount</strong> into optimizing these when developing an <strong>ultra-low power product</strong></li>
+</ul>
+<aside class="notes">
+<p>It’s these messages that are exchanged between your devices and your backend which are the most important aspect to optimize for when developing an ultra-low power product because initiating and maintaining network connection is relatively expensive compared to other device operations (for example reading a sensor value).</p>
+<p>It is therefore recommended to invest a substantial amount of time to revisit the principles explained here and customize them to your specific needs. The more the modem-uptime can be reduced and the smaller the total transferred amount of data becomes, the longer your battery will last.</p>
+</aside>
+</section></section>
+<section>
+<section id="data-protocols" class="title-slide slide level2">
+<h2>Data protocols</h2>
+<ul>
+<li>JSON</li>
+<li>Alternatives to JSON
+<ul>
+<li>Flatbuffers</li>
+<li>CBOR</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Let’s look at the “default” protocol for encoding Application data and what alternatives exist to reduce the amount of data needed to transmit a typical device message: a GPS location.</p>
+</aside>
+</section>
+<section id="json" class="slide level3">
+<h3>JSON</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="dt">&quot;v&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="dt">&quot;lng&quot;</span><span class="fu">:</span> <span class="fl">10.414394</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="dt">&quot;lat&quot;</span><span class="fu">:</span> <span class="fl">63.430588</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="dt">&quot;acc&quot;</span><span class="fu">:</span> <span class="fl">17.127758</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="dt">&quot;alt&quot;</span><span class="fu">:</span> <span class="fl">221.639832</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="dt">&quot;spd&quot;</span><span class="fu">:</span> <span class="fl">0.320966</span><span class="fu">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="dt">&quot;hdg&quot;</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>  <span class="fu">},</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="dt">&quot;ts&quot;</span><span class="fu">:</span> <span class="dv">1566042672382</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="fu">}</span></span></code></pre></div>
+<p>“default” data protocol for IoT (<a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html">AWS</a>, <a href="https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-device-twins">Azure</a>, <a href="https://cloud.google.com/iot/docs/how-tos/config/getting-state#api">Google Cloud</a>)</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>👍 human readable<br />
+👍 schema-less (self-describing)</p>
+</div><div class="column" style="width:50%;">
+<p>👎 overhead</p>
+</div>
+</div>
+<aside class="notes">
+<p>JSON offers very good support in tooling and is human readable. Especially during development its verbosity is valuable.</p>
+</aside>
+</section>
+<section id="possible-optimizations" class="slide level3">
+<h3>Possible Optimizations</h3>
+<p>GPS location message</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="dt">&quot;v&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="dt">&quot;lng&quot;</span><span class="fu">:</span> <span class="fl">10.414394</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="dt">&quot;lat&quot;</span><span class="fu">:</span> <span class="fl">63.430588</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="dt">&quot;acc&quot;</span><span class="fu">:</span> <span class="fl">17.127758</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="dt">&quot;alt&quot;</span><span class="fu">:</span> <span class="fl">221.639832</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    <span class="dt">&quot;spd&quot;</span><span class="fu">:</span> <span class="fl">0.320966</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    <span class="dt">&quot;hdg&quot;</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>  <span class="fu">},</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>  <span class="dt">&quot;ts&quot;</span><span class="fu">:</span> <span class="dv">1566042672382</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="fu">}</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p><br/></p>
+<pre><code>02 36 01 37 51 4b 73 2b
+d4 24 40 09 68 06 f1 81
+1d b7 4f 40 11 68 cd 8f
+bf b4 20 31 40 19 e6 5d
+f5 80 79 b4 6b 40 21 1a
+30 48 fa b4 8a d4 3f 29
+00 00 00 00 00 00 00 00
+09 00 e0 cf ac f6 c9 76
+42</code></pre>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>JSON<br />
+114 bytes<br />
+<small>without newlines</small></p>
+</div><div class="column" style="width:50%;">
+<p>Protocol Buffers<br />
+65 bytes (-42%)<br />
+<small><a href="https://gist.github.com/coderbyheart/34a8e71ffe30af882407544567971efb">source</a></small></p>
+</div>
+</div>
+<aside class="notes">
+<p>Consider this GPS message. It contains a lot of data which is intended for humans, but not needed for machines sending or receiving the data.</p>
+<p>The pure binary message would be transmitting only the 6 floats and 1 integer of the message. However a strucured message format is always preferred because we also want to ensure its integrity.</p>
+<p>In JSON notation this document (without newlines) has 114 bytes. If the message were to be transferred using for example Protocol Buffers the data can be encoded with only 65 bytes (a 42% improvement).</p>
+<p>See also: <a href="http://tutorials.jenkov.com/rion/rion-performance-benchmarks.html">RION Performance Benchmarks</a></p>
+</aside>
+</section>
+<section id="flatbuffers" class="slide level3">
+<h3>Flatbuffers</h3>
+<p><a href="https://google.github.io/flatbuffers/">google.github.io/flatbuffers</a></p>
+<ul>
+<li>evolution of <a href="https://developers.google.com/protocol-buffers">Protocol Buffers</a></li>
+<li><strong>access a buffer without parsing</strong></li>
+<li>smaller library, <a href="https://github.com/dvidelabs/flatcc">C implementation exists</a></li>
+<li>wire format size <a href="http://google.github.io/flatbuffers/flatbuffers_benchmarks.html">a little bigger</a> compared to Protocol Buffers</li>
+<li>schema-less (self-describing) messages are supported</li>
+<li><strong>NOT</strong> supported in Zephyr/NCS</li>
+</ul>
+<aside class="notes">
+<p>In the comparison on the previous slide we showed how using Protocol Buffers can dramatically reduce the transferred data size, while keeping a typed message.</p>
+<p>The implementation of Protocol Buffers is however quite big (for a resource constrained device like the nRF9160), and no official encoder/decoder implementation exists for C, <a href="https://github.com/protobuf-c/protobuf-c">inofficial does</a>.</p>
+<p>Flatbuffers is the best candidate with similar data savings.</p>
+<p>Especially the ability to access members of a message directly in place makes it ideal for memory-constrained devices: no need to create a second copy of the received values.</p>
+<p>It also offers flexibility during development is also supported because FlatBuffers offers a schema-less (self-describing) version.</p>
+<p>Unfortunately there is no official support in the nRF Connect SDK or Zephyr as of now.</p>
+</aside>
+</section>
+<section id="cbor" class="slide level3">
+<h3>CBOR</h3>
+<p><a href="https://cbor.io/">cbor.io</a></p>
+<ul>
+<li>maps JSON to binary structures</li>
+<li>zero configuration needed between exchanging parties</li>
+<li>support in Zephyr (<a href="https://github.com/zephyrproject-rtos/tinycbor">tinycbor</a>)</li>
+</ul>
+<aside class="notes">
+<p>Therefore the best alternative to JSON right now is CBOR.</p>
+<p>CBOR is standard for encoding JSON data in a set of binary structures. It reduces volume by using more compact one byte values to replace two or more punctuation marks.</p>
+<p>Official support is available in Zephyr.</p>
+</aside>
+</section>
+<section id="cbor-example" class="slide level3">
+<h3>CBOR: example</h3>
+<p>GPS location message</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="dt">&quot;v&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">&quot;lng&quot;</span><span class="fu">:</span> <span class="fl">10.414394</span><span class="fu">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="dt">&quot;lat&quot;</span><span class="fu">:</span> <span class="fl">63.430588</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">&quot;acc&quot;</span><span class="fu">:</span> <span class="fl">17.127758</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="dt">&quot;alt&quot;</span><span class="fu">:</span> <span class="fl">221.639832</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="dt">&quot;spd&quot;</span><span class="fu">:</span> <span class="fl">0.320966</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="dt">&quot;hdg&quot;</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>  <span class="fu">},</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>  <span class="dt">&quot;ts&quot;</span><span class="fu">:</span> <span class="dv">1566042672382</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="fu">}</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p><br/></p>
+<pre><code>A2 61 76 A6 63 6C 6E 67
+FB 40 24 D4 2B 73 4B 51
+37 63 6C 61 74 FB 40 4F
+B7 1D 81 F1 06 68 63 61
+63 63 FB 40 31 20 B4 BF
+8F CD 68 63 61 6C 74 FB
+40 6B B4 79 80 F5 5D E6
+63 73 70 64 FB 3F D4 8A
+B4 FA 48 30 1A 63 68 64
+67 00 62 74 73 1B 00 00
+01 6C 9F 6A CC FE</code></pre>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>JSON<br />
+114 bytes<br />
+<small>without newlines</small></p>
+</div><div class="column" style="width:50%;">
+<p>CBOR<br />
+86 bytes (-24%)<br />
+<small><a href="http://cbor.me/">source</a></small></p>
+</div>
+</div>
+<aside class="notes">
+<p>This shows the possible savings when encoding the GPS location message using CBOR.</p>
+</aside>
+</section>
+<section id="summary-data-protocols" class="slide level3">
+<h3>Summary: Data protocols</h3>
+<p>Look into denser data protocols!<br />
+<strong>JSON is for Humans.</strong></p>
+<ul>
+<li>devices always™ send the same structure:<br />
+no need to transmit it</li>
+<li>less data to send
+<ul>
+<li>less money spent on data (grows linear with № of devices)</li>
+<li>less energy consumed = longer device lifetime</li>
+<li>lower chance of failed transmit</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="transport-protocols" class="title-slide slide level2">
+<h2>Transport protocols</h2>
+<ul>
+<li>MQTT+TLS</li>
+<li>MQTT-SN+(D)TLS</li>
+<li>CoAP/LWM2M+(D)TLS</li>
+</ul>
+</section>
+<section id="mqtttls" class="slide level3">
+<h3>MQTT+TLS</h3>
+<p>common protocol for “ecommerce” cloud vendors<br />
+(<a href="https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html">AWS</a>, <a href="https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-protocols">Azure</a>, <a href="https://cloud.google.com/iot/docs/concepts/protocols">Google Cloud</a>)</p>
+<ul>
+<li>great fit for asynchronous, event oriented communication: MQTT is bidirectional pub/sub model</li>
+<li>overhead:
+<ul>
+<li>topic name in every MQTT package<br />
+№ of topics per device: ~3</li>
+<li>TLS handshake with AWS IoT broker: ~10 KB</li>
+</ul></li>
+<li>Supported out of the box in nRF Connect SDK</li>
+</ul>
+<aside class="notes">
+<p>MQTT with TLS is the default protocol when using IoT offerings from “ecommerce” cloud vendors like Amazon, Microsoft or Google. It’s a great fit for the event-driven communication in IoT and allows both sides to initiate communication.</p>
+<p>However the protocol overhead for both MQTT and TLS are substantial: the initial handshake is large, and then every MQTT package contains repeated information. The MQTT topic name is quite long (typical size is around 60 Byte), which could actually be omitted.</p>
+</aside>
+</section>
+<section id="mqtt-sndtls" class="slide level3">
+<h3>MQTT-SN+(D)TLS</h3>
+<p><a href="https://www.oasis-open.org/committees/document.php?document_id=66091">MQTT-SN 1.2 Specification</a></p>
+<ul>
+<li>optimized version designed specifically IoT</li>
+<li>supports UDP</li>
+<li>use numeric IDs instead of strings for topic names</li>
+<li>better offline support</li>
+<li><strong>not supported</strong> out of the box in nRF Connect SDK</li>
+<li><strong>not supported</strong> by cloud vendors: needs a (stateful) Gateway</li>
+</ul>
+<aside class="notes">
+<p>MQTT-SN was specifically designed for IoT devices and tries to address the issues mentioned earlier.</p>
+<p>The main differences involve:</p>
+<ul>
+<li>Reducing the size of the message payload</li>
+<li>Removing the need for a permanent connection by using UDP as the transport protocol.</li>
+</ul>
+</aside>
+</section>
+<section id="coaplwm2mdtls" class="slide level3">
+<h3>CoAP/LWM2M+(D)TLS</h3>
+<ul>
+<li>common protocol in Telco clouds (Verizon’s Thingspace, AT&amp;T’s IoT Platform)</li>
+<li>typically used for device management (carrier library)</li>
+<li>support in nRF Connect SDK (<a href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/coap_client/README.html">CoAP client sample</a>, <a href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/lwm2m_client/README.html">LwM2M client sample</a>)</li>
+<li><strong>not supported</strong> by cloud vendors: needs a (stateful) Gateway.<br />
+Proof-of-concept AWS IoT-LwM2M Gateway: <a href="https://github.com/coderbyheart/leshan-aws">github.com/coderbyheart/leshan-aws</a></li>
+</ul>
+<aside class="notes">
+<p>This protocol is mostly used for device management. Especially LwM2M comes with a large set of predefined operations (e.g. firmware update) and uses very lightweight messaging. It also supports UDP out of the box which makes it an ideal protoco for resource constraint devices.</p>
+<p>However there is no out-of-the box support by ecommerce cloud vendors, so here again one needs to operate a Gateway.</p>
+</aside>
+</section></section>
+<section>
+<section id="how-to-measure-data-usage" class="title-slide slide level2">
+<h2>How to measure data usage</h2>
+<ul>
+<li>measure during development already: important input on picking the right connectivity partner</li>
+<li>measuring at multiple endpoints tricky (MQTT + HTTP), does not measure failed transmits</li>
+<li>nRF9160 modem provides <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxconnstat.html">connectivity statistics</a></li>
+</ul>
+<aside class="notes">
+<p>One of the biggest cost factors when operating a cellular IoT product are data transfers. Not only are prices for IoT connectivity multiple magnitudes more expensive to what we are used from smartphone contracts, but transmitting data also requires a lot of energy. The longer the devices needs to transmit a payload the more likely it is also that the connection deteriorates (especially when the device is moving) and re-transmits need to happen. Therefore it is important to pay close attention to the amount of data your product is sending from the beginning. Having knowledge about the data usage profile of your application at hand also becomes important when picking the right connectivity partner.</p>
+<p>While it is possible to infer a device’s data consumption on the terminating endpoint, this information is not accurate, because it can observe successfully incoming messages. It can also become challenging to cover all endpoints, for example Firmware over the Air updates are typically downloaded via HTTPs from a web server and not through MQTT.</p>
+</aside>
+</section>
+<section id="enable-connectivity-statistics" class="slide level3">
+<h3>Enable connectivity statistics</h3>
+<p>Use <code>AT%XCONNSTAT=1</code> to tell the modem to start collecting connectivity statistics</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;modem/at_cmd.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="dt">int</span> err = at_cmd_write(<span class="st">&quot;AT%XCONNSTAT=1&quot;</span>, NULL, <span class="dv">0</span>, NULL);</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="cf">if</span> (err != <span class="dv">0</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    printk(<span class="st">&quot;Could not enable connection statistics, error: %d</span><span class="sc">\n</span><span class="st">&quot;</span>, err);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>}</span></code></pre></div>
+</section>
+<section id="read-current-connectivity-statistics" class="slide level3">
+<h3>Read current connectivity statistics</h3>
+<p>Use <code>AT%XCONNSTAT?</code> to read the current connectivity statistics</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="dt">static</span> <span class="kw">struct</span> k_delayed_work connstat_work;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="dt">static</span> <span class="dt">int</span> query_modem(<span class="dt">const</span> <span class="dt">char</span> *cmd, <span class="dt">char</span> *buf, <span class="dt">size_t</span> buf_len) { ... }</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="dt">static</span> <span class="dt">void</span> connstat_work_fn(<span class="kw">struct</span> k_work *work)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>{</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    query_modem(<span class="st">&quot;AT%XCONNSTAT?&quot;</span>, connStatBuffer, <span class="kw">sizeof</span>(connStatBuffer));</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="co">// </span><span class="al">NOTE</span><span class="co">: k_uptime_get_32() cannot hold a system uptime time</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="co">// larger than approximately 50 days</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    printk(<span class="st">&quot;Connection stats: %s | Uptime: %d seconds</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>        connStatBuffer, k_uptime_get_32() / <span class="dv">1000</span>);</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="co">// Schedule next run</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>    k_delayed_work_submit(&amp;connstat_work, K_SECONDS(<span class="dv">60</span>));</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>}</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a>k_delayed_work_init(&amp;connstat_work, connstat_work_fn);</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a>k_delayed_work_submit(&amp;connstat_work, K_SECONDS(<span class="dv">60</span>));</span></code></pre></div>
+<p><small>You can see a full diff of how I added this to one of my applications <a href="https://github.com/coderbyheart/nRF9160-temperature-controlled-relay/commit/d0c43bb5c11347987ce61c84c695e17eb38f39cd">here</a>.</small></p>
+</section>
+<section id="connectivity-statistics-output" class="slide level3">
+<h3>Connectivity statistics output</h3>
+<pre><code>Connection stats: %XCONNSTAT: 0,0,14,16,748,134 | Uptime: 5041 seconds</code></pre>
+<h4 id="syntax">Syntax</h4>
+<pre><code>%XCONNSTAT: &lt;SMS Tx&gt;,&lt;SMS Rx&gt;,&lt;Data Tx&gt;,&lt;Data Rx&gt;,&lt;Packet max&gt;,&lt;Packet average&gt;</code></pre>
+<ol type="1">
+<li>SMS Tx: total number of SMSs successfully transmitted</li>
+<li>SMS Rx: total number of SMSs successfully received</li>
+<li><strong>Data Tx: total amount of data (in kilobytes) transmitted</strong></li>
+<li><strong>Data Rx: total amount of data (in kilobytes) received</strong></li>
+<li>Packet max: maximum packet size (in bytes) used</li>
+<li>Packet average: average packet size (in bytes) used</li>
+</ol>
+<aside class="notes">
+<p>Now you have access to the connectivity statistics, and can for example publish this to the cloud every hour so you can collect precise data consumption usage from your devices. Together with the uptime information collected on the device you will be able to develop a very good understand of what the typical data usage per day, week and month will be for your devices.</p>
+<p><a href="https://devzone.nordicsemi.com/nordic/cellular-iot-guides/b/software-and-protocols/posts/monitoring-nrf9160-data-usage-with-connectivity-statistics">See this blog post</a></p>
+</aside>
+</section>
+<section id="caution" class="slide level3">
+<h3>Caution</h3>
+<p>Do not use the connectivity statistics in applications which use the <a href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/lib/bin/lwm2m_carrier/lwm2m_carrier.html#liblwm2m-carrier-readme">LwM2M carrier library</a>.</p>
+<p>This library manages the collection of connectivity statistics and will turn them on and off on its behalf. If your application interferes with this statistics collection it will result in incorrect measurements in the carrier’s device management solution.</p>
+</section></section>
+<section>
+<section id="wireless-radio-protocols" class="title-slide slide level2">
+<h2>Wireless radio protocols</h2>
+<figure>
+<img data-src="./wireless-protocols.webp" alt="Wireless radio protocols" /><figcaption aria-hidden="true">Wireless radio protocols</figcaption>
+</figure>
+<aside class="notes">
+<p>The nRF9160 supports two cellular networking protocols: LTE-M and NB-IoT. Fundamentally they both provide IP connectivity to your device, however they are significant differences, which are important to consider when developing your IoT product.</p>
+<p>See <a href="https://www.nordicsemi.com/Products/Low-power-cellular-IoT">this comparison</a></p>
+</aside>
+</section>
+<section id="lte-m" class="slide level3">
+<h3><img data-src="./ltem.webp" alt="LTE-m" /></h3>
+<ul>
+<li>375 kbps downlink, 300 kbps uplink</li>
+<li>~100 kbps application throughput running IP</li>
+<li>supports roaming (same as LTE)</li>
+<li>typically uses frequency bands above 2 Ghz</li>
+<li>ms-latency</li>
+</ul>
+<aside class="notes">
+<p>LTE-M (also known as Cat-M1) is designed for low power applications requiring medium throughput. It has a narrower bandwidth of 1.4 MHz compared to 20 MHz for regular LTE, giving longer range, but less throughput. The throughput is 375 kbps downlink and 300 kbps uplink, providing approximately 100 kbps application throughput running IP. It is suitable for TCP/TLS end-to-end secure connections. Mobility is fully supported, using the same cell handover features as in regular LTE. It is currently possible to roam with LTE-M, meaning it is suitable for applications that will operate across multiple regions. The latency is in the millisecond range offering real time communication for time-critical applications.</p>
+</aside>
+</section>
+<section id="nb-iot" class="slide level3">
+<h3><img data-src="./nbiot.webp" alt="NB-IoT" /></h3>
+<ul>
+<li>60 kbps downlink, 30 kbps uplink</li>
+<li>typically uses frequency bands below 2 Ghz</li>
+<li>no roaming support (some Telcos do offer custom solution)</li>
+<li>good indoor/underground penetration characteristics</li>
+<li>long range</li>
+</ul>
+<aside class="notes">
+<p>NB-IoT (also known as Cat-NB1) is a narrowband technology standard that does not use a traditional LTE physical layer, but is designed to operate in or around LTE bands and coexist with other LTE devices. It has a bandwidth of 200 kHz, giving it longer range and lower throughput compared to LTE-M and regular LTE. The throughput is 60 kbps downlink and 30 kbps uplink. It is suitable for static, low power applications requiring low throughput.</p>
+</aside>
+</section>
+<section id="comparison" class="slide level3">
+<h3>Comparison</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h4 id="lte-m-1">LTE-m</h4>
+<p><small>for medium throughput applications requiring low power, low latency and/or mobility</small></p>
+<ul>
+<li>asset tracking</li>
+<li>wearables</li>
+<li>medical</li>
+<li>POS</li>
+<li>home security</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h4 id="nb-iot-1">NB-IoT</h4>
+<p><small>for static, low throughput applications requiring low power and long range</small></p>
+<ul>
+<li>smart metering</li>
+<li>smart agriculture</li>
+<li>smart city</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>LTE-M is perfect for medium throughput applications requiring low power, low latency and/or mobility, like asset tracking, wearables, medical, POS and home security applications.</p>
+<p>NB-IoT is perfect for static, low throughput applications requiring low power and long range, like smart metering, smart agriculture and smart city applications. It also provides better penetration in, for example, cellars and parking garages compared to LTE-M.</p>
+</aside>
+</section></section>
+<section>
+<section id="energy-consumption-considerations" class="title-slide slide level2">
+<h2>Energy consumption considerations</h2>
+<p><small>Carl Richard Fosse</small></p>
+<aside class="notes">
+<p>Low power operation is key for many IoT devices Application protocols on cellular devices like the nRF9160</p>
+</aside>
+</section>
+<section id="my-master-thesis-research" class="slide level3">
+<h3>My master thesis research</h3>
+<p><em>“Power Consumption modeling of TCP and UDP over low power cellular networks for a constrained device”</em></p>
+<ul>
+<li>TCP represented by MQTT</li>
+<li>UDP represented by CoAP</li>
+<li>Tested both protocols over NB-IoT and LTE-M, using the nRF9160.</li>
+<li>Used the data to empirically model the power consumption of the device.</li>
+</ul>
+<aside class="notes">
+<p>Last spring, before starting at Nordic Titled “Power Consumption modeling of TCP and UDP over low power cellular networks for a constrained device”, where I compared TCP and UDP over LTE-M and NB-IoT using the nRF9160.</p>
+<p>Used the data to model energy consumption given parameters like payload size and transmission interval.</p>
+<p>Will talk about findings and observations.</p>
+</aside>
+</section>
+<section id="experiment-setup-components" class="slide level3">
+<h3>Experiment setup: Components</h3>
+<ul>
+<li><p>Hardware: nRF9160DK v0.8.5</p></li>
+<li><p>SDK: v1.2.0</p></li>
+<li><p>Measurement unit: Otii ARC</p></li>
+<li><p>Network provider: Telenor LTE-M and NB-IoT</p></li>
+<li><p>Power measurement setup will be more thoroughly covered in our webinar the 9th of December.</p></li>
+</ul>
+<aside class="notes">
+<ul>
+<li>Quick runthrough</li>
+<li>nRF9160DK version 0.8.5</li>
+<li>nRF Connect SDK version 1.2</li>
+<li>Otii ARC for current measurement</li>
+<li>The Norwegian network provider Telenor and their LTE-M and NB-IoT networks</li>
+</ul>
+</aside>
+</section>
+<section id="experiment-setup-firmware" class="slide level3">
+<h3>Experiment setup: Firmware</h3>
+<ul>
+<li>One application for MQTT and one for CoAP<br />
+<small>(available on <a href="https://github.com/crfosse/dt_app">GitHub</a>)</small></li>
+<li>Long PSM interval with regular transmissions and increasing payload</li>
+<li>Average sleep current ~200µA</li>
+</ul>
+<aside class="notes">
+<ul>
+<li>Two applications</li>
+<li>Regular transmissions</li>
+<li>Both using the Power Saving Mode feature defined for LTE-M and NB-IoT.</li>
+<li>The PSM specification allows for a device to initiate transmissions during the defined PSM interval.</li>
+<li>A long PSM interval was used to avoid other wakeups than those initiated by regular transmissions.</li>
+<li>Did not focus on optimizing the power consumption performance of the applications.</li>
+<li>Rather wanted to focus on how the protocols performed with relation to eachother.</li>
+</ul>
+</aside>
+</section>
+<section id="energy-consumption-factors-application-protocols" class="slide level3">
+<h3>Energy consumption factors: Application protocols</h3>
+<ul>
+<li>Establishment of connection
+<ul>
+<li>Especially relevant for TCP</li>
+</ul></li>
+<li>Acknowledgements</li>
+<li>Payload size</li>
+<li>Protocol defined limits
+<ul>
+<li>Maximum transmission unit (MTU)</li>
+<li>Maximum segment size (MSS)</li>
+</ul></li>
+</ul>
+</section>
+<section id="energy-consumption-factors-cellular-network" class="slide level3">
+<h3>Energy consumption factors: Cellular network</h3>
+<ul>
+<li><p>Connection</p></li>
+<li><p>RRC inactive timer</p></li>
+<li><p>Reception quality</p></li>
+<li><p>Additional parameters - see the Online Power Profiler</p></li>
+</ul>
+<aside class="notes">
+<ul>
+<li><p>Short summary of important factors affecting the energy consumption of a cellular device</p></li>
+<li><p>Connection establishment is relevant on application protocol level and for cellular networks</p></li>
+<li><p>TCP has persistent connection, requiring more traffic</p></li>
+<li><p>To enable reliable communication acknowledgements are important.</p></li>
+<li><p>They lead to unpredictable behavior as well as more traffic</p></li>
+<li><p>There are many limits imposed by different protocols</p></li>
+<li><p>MTU from IP and Ethernet</p></li>
+<li><p>MSS on TCP to avoid IP fragmentation</p></li>
+<li><p>Connecting to the cellular network is costly. PSM lowers the cost.</p></li>
+<li><p>With PSM the devices stays active during an RRC inactive countdown consuming power. (network defined)</p></li>
+<li><p>Test and read about additional parameters in our online power profiler</p></li>
+</ul>
+</aside>
+</section>
+<section id="time-diagram" class="slide level3">
+<h3>Time diagram</h3>
+<p><img data-src="./time-diagram.png" /></p>
+<aside class="notes">
+<ul>
+<li>Example diagram of a transmission.
+<ul>
+<li>Exits PSM and reconnects</li>
+</ul></li>
+<li>Transmits</li>
+<li>Stays active.
+<ul>
+<li>Last part is active timer. Only relevant if you expect data to be received.</li>
+</ul></li>
+<li>Not used in my research.</li>
+</ul>
+</aside>
+</section>
+<section id="in-reality" class="slide level3">
+<h3>In reality</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="./mqtt-over-nbiot.png" /></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="./mqtt-over-ltem.png" /></p>
+</div>
+</div>
+<aside class="notes">
+<p>Example transmissions for MQTT over LTE-M and NB-IoT. Notice where the transmission is finished and inactive countdown starts. Very different on the LTE-M and NB-IoT LTE-M has higher peaks and more frequent activity, which in turn affects the power consumption.</p>
+</aside>
+</section>
+<section id="some-results" class="slide level3">
+<h3>Some results</h3>
+</section>
+<section id="transmission-energy" class="slide level3">
+<h3>Transmission energy</h3>
+<p><img data-src="./transmission-energy.png" /></p>
+<aside class="notes">
+<ul>
+<li><p>Averaged out plots for energy used on transmission</p></li>
+<li><p>Dashed line – with RRC inactive</p></li>
+<li><p>Solid line – without RRC inactive energy</p></li>
+<li><p>The RRC inactive energy is dependent on network provider and was therefore not considered</p></li>
+<li><p>Notice how much it contributes to the total energy consumed</p></li>
+<li><p>NB-IoT is linearly dependent on payload size.</p></li>
+<li><p>LTE-M, with higher capacity, is not. Within the tested payload size range.</p></li>
+<li><p>Some outliers for TCP over LTE-M resulting in energy consumption spikes. Restarting of RRC inactive timer due to activity</p></li>
+<li><p>CoAP in general use less energy than MQTT.</p></li>
+<li><p>Mentioned MSS earlier. These results evidently shows how this affects energy consumption</p></li>
+<li><p>For MQTT on both LTE-M and NB-IoT there is an increase in consumed power after payload exceeds ~500 bytes</p></li>
+<li><p>The base MSS is 536 bytes.</p></li>
+</ul>
+<p>Note at last that there is a starting cost to every transmission.</p>
+</aside>
+</section>
+<section id="transmission-energy-1" class="slide level3">
+<h3>Transmission energy</h3>
+<p><img data-src="./message-energy-variation.png" style="width:60.0%" /></p>
+<aside class="notes">
+<ul>
+<li>Violin plots showing variation and distribution of measurements, based on residuals from regression analysis.</li>
+<li>Small for NB-IoT</li>
+<li>More spurious for LTE-M</li>
+</ul>
+</aside>
+</section>
+<section id="transmission-time" class="slide level3">
+<h3>Transmission time</h3>
+<p><img data-src="./transmission-time.png" /></p>
+<aside class="notes">
+<p>Plot of transmission time. The dashed line shows how long the device stays active in total</p>
+<ul>
+<li>LTE-M is as expected faster than NB-IoT.</li>
+<li>Not a strong correlation for any of them with payload size</li>
+<li>Notice that the MSS affects time used on transmission aswell</li>
+</ul>
+</aside>
+</section>
+<section id="transmission-time-variation" class="slide level3">
+<h3>Transmission time variation</h3>
+<p><img data-src="./transmission-time-variation.png" style="width:60.0%" /></p>
+<aside class="notes">
+<ul>
+<li>Violin plots of variation and distribution of transmission time measurements</li>
+<li>NB-IoT is wide and latent.</li>
+<li>LTE-M especially for CoAP has a low variation.</li>
+</ul>
+</aside>
+</section>
+<section id="important-observations-application-protocols" class="slide level3">
+<h3>Important observations: Application protocols</h3>
+<ul>
+<li>MQTT
+<ul>
+<li>TCP is not ideal for low power applications</li>
+<li>MQTT is a popular and well supported protocol</li>
+</ul></li>
+<li>CoAP
+<ul>
+<li>Less overhead compared to MQTT</li>
+<li>Enables reliable UDP</li>
+<li>Not that popular</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<ul>
+<li>MQTT is well supported, but TCP is not ideal for low power use. We saw more spurious timing and energy consumption</li>
+<li>CoAP has less overhead, supports reliability, but is not very popular(yet?)</li>
+</ul>
+</aside>
+</section>
+<section id="important-observations-cellular-standards" class="slide level3">
+<h3>Important observations: Cellular standards</h3>
+<ul>
+<li>LTE-M
+<ul>
+<li>High speed, high capacity</li>
+<li>Power consumption not correlated with payload size</li>
+<li>More “spurious” energy consumption</li>
+</ul></li>
+<li>NB-IoT
+<ul>
+<li>Slow, low capacity</li>
+<li>Energy consumption is linearly dependent with payload size</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<ul>
+<li>LTE-M and NB-IoT are as expected suited for different purposes.</li>
+<li>LTE-M saw higher peak currents as well as some spurious behavior during the inactive countdown.</li>
+<li>When transmitting large amounts of data on a network that provides a short inactive countdown LTE-M can actually outperform NB-IoT in terms of power consumption.</li>
+<li>Due to the linear dependency of NB-IoT with relation to payload size.</li>
+</ul>
+</aside>
+</section>
+<section id="transfer-large-amounts-of-data-rarely" class="slide level3">
+<h3>Transfer large amounts of data rarely</h3>
+<p>rather than small amounts often.</p>
+</section></section>
+<section id="summary" class="title-slide slide level2">
+<h2>Summary</h2>
+<ul>
+<li>no silver bullet - multiple <em>conflicting</em> dimensions need to be considered</li>
+<li>highly depends on use case scenario</li>
+<li>ultra-low power relevant in all scenarios</li>
+</ul>
+<aside class="notes">
+
+</aside>
+</section>
+
+<section>
+<section id="ways-to-your-first-proof-of-concept" class="title-slide slide level2">
+<h2>Ways to your first proof-of-concept</h2>
+<ul>
+<li>nRF Connect for Cloud</li>
+<li>Bifravst</li>
+</ul>
+<aside class="notes">
+<p>Now, if you want to get started with developing your cellular IoT product here are some resources…</p>
+</aside>
+</section>
+<section id="nrf-connect-for-cloud" class="slide level3">
+<h3>nRF Connect for Cloud</h3>
+<ul>
+<li>cloud resources (AWS) provided by us</li>
+<li>our <a href="https://www.nordicsemi.com/Software-and-tools/Development-Kits">cellular IoT Development Kits</a> are preconfigured to connect</li>
+<li>you can focus on modifying the <a href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.3.2/nrf/applications/asset_tracker/README.html">sample application</a>
+<ul>
+<li><a href="https://github.com/coderbyheart/fw-nrfconnect-nrf-docker#using-pre-built-image-from-dockerhub">Building NCS applications with Docker</a> in ~2 minutes</li>
+</ul></li>
+</ul>
+<p><img data-src="./nrfconnectforcloud.webp" style="width:10.0%" alt="nRF Connect for Cloud" /><br />
+<small><a href="https://nrfcloud.com/">nrfcloud.com</a></small></p>
+<aside class="notes">
+<p>nRF Connect for Cloud is an integral part of you cellular IoT development workflow. We have made nRF Connect for Cloud simple to use, yet powerful and efficient when getting your cellular designs and products connected.</p>
+</aside>
+</section>
+<section id="bifravst" class="slide level3">
+<h3>Bifravst</h3>
+<ul>
+<li>concrete end-to-end example for an ultra-low power cellular IoT product in the asset tracker space</li>
+<li>end-to-end example: firmware 🡘 cloud 🡘 mobile web app</li>
+<li>runs in your AWS account<br />
+<small>Azure support <a href="https://github.com/bifravst/bifravst/issues/29">in progress</a></small></li>
+<li>fully open-source<br />
+<small>3-clause BSD license (software) and the Nordic 5-clause BSD license (firmware)</small></li>
+<li><a href="https://github.com/bifravst/firmware">firmware</a> developed from ground up with power consumption in mind</li>
+</ul>
+<p><img data-src="./cat-tracker.png" style="width:50.0%" alt="Bifravst" /><br />
+<small><a href="https://bifravst.github.io/">bifravst.github.io</a></small></p>
+<aside class="notes">
+<p><em>Bifravst</em> aims to provide a concrete end-to-end example for an ultra-low power IoT product in the asset tracker space, namely a <em>Cat Tracker</em>.</p>
+<p><strong><em>Bifravst</em> enables the developers to set up a real world IoT solution using the respective cloud provider and adapt the example firmware and software quickly for a specific use case.</strong></p>
+<p><em>Bifravst</em> aims to provide answers and recommend best practices to the following questions :</p>
+<ul>
+<li><em>How can you connect Nordic’s cellular IoT chips to your cloud provider?</em></li>
+<li><em>How do devices send data into the cloud?</em></li>
+<li><em>How can the data be sent to the devices?</em></li>
+<li><em>How can users and other services interact with the devices?</em></li>
+<li><em>How can you update the application firmware of your devices while they are deployed in the field?</em></li>
+<li><em>How can you develop a cellular IoT product that maximizes battery life, minimizes data usage, and handles unreliable connectivity gracefully?</em></li>
+</ul>
+</aside>
+</section></section>
+<section id="thank-you-happy-connecting" class="title-slide slide level2">
+<h2>Thank you &amp; happy connecting!</h2>
+<p>Please share your feedback!</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><small><a href="mailto:Markus.Tacker@NordicSemi.no">Markus.Tacker@NordicSemi.no</a><br />
+Twitter: <a href="https://twitter.com/coderbyheart">@coderbyheart</a></small></p>
+</div><div class="column" style="width:50%;">
+<p><small><a href="mailto:Carl.Fosse@NordicSemi.no">Carl.Fosse@NordicSemi.no</a></small></p>
+</div>
+</div>
+<p><a href="https://twitter.com/hashtag/NordicTechWebinars">#NordicTechWebinars</a><br />
+<a href="https://devzone.nordicsemi.com/"><img data-src="./devzone.svg" style="width:25.0%" alt="{DevZone" /></a></p>
+<p><small>Latest version: <a href="http://bit.ly/nwiotp"><code>bit.ly/nwiotp</code></a></small></p>
+<aside class="notes">
+
+</aside>
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
