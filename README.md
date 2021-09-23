@@ -2,7 +2,7 @@
 
 ![Publish](https://github.com/coderbyheart/nordicwebinar2020/workflows/Publish/badge.svg?branch=saga)
 
-[![Nordic Semiconductor Webinar: Cloud connectivity and protocols for IoT](./announcement.jpg)](https://webinars.nordicsemi.com/cloud-connectivity-and-protocols/join)
+[![Nordic Semiconductor Webinar: Cloud connectivity and protocols for IoT](./announcement.jpg)](https://webinars.nordicsemi.com/cloud-connectivity-and-protocols-5)
 
 Slides for the webinar:
 
